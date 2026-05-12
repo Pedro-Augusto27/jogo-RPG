@@ -20,6 +20,5 @@
 - Os inimigos vão dropar vida ao morrerem.
 - Quando o jogador atacar os inimigos, eles se afastam um pouco. 
 - Dialogo com o NPC ao aperta 'Z'.
-
-
-
+- O inimigo do tutorial não vai atras do jogador.
+(igual em The Legends of Zelda Minish Cap)

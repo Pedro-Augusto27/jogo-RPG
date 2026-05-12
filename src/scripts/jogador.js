@@ -1,6 +1,6 @@
 const jogador = {
-    x: 50,  // Posição horizontal inicial
-    y: 50,  // Posição vertical inicial
+    x: 300,  // Posição horizontal inicial
+    y: 420,  // Posição vertical inicial
 
     // Tamanho do jogador
     largura: 40,
