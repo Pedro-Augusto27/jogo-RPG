@@ -1,0 +1,12 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #fff; /* Cor de fundo da página */
+}
+
+canvas {
+    /* Cor de fundo dentro do quadro(canvas) */
+    background-color: rgb(92, 97, 107); 
+}
