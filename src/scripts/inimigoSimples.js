@@ -3,10 +3,17 @@ const inimigo = {
     y: 121,  // Posição vertical inicial
     largura: 40,  // Largura do inimigo
     altura: 40,  // Altura do inimigo
+
     cor: 'blue',  // Cor do inimigo
 
     velocidadeX: 2,  // Velocidade horizontal 
-    direcao: 1 // 1 = direita, -1 = esquerda
+    direcao: 1, // 1 = direita, -1 = esquerda
+    
+    vida: 3, // Vida do inimigo
+    fimPiscaAte: 0,
+    ultimoAlternarPisca: 0,
+    estaBrilhando: false,
+    ultimoDanoRecebido: 0
 };
 
 // Limites de patrulhamento horizontal
@@ -33,6 +40,19 @@ function moverInimigo() {
 
 // Desenha o inimigo
 function desenharInimigo() {
-    ctx.fillStyle = inimigo.cor;
+    const agora = Date.now();
+
+    if (agora < inimigo.fimPiscaAte) {
+        if (agora - inimigo.ultimoAlternarPisca >= 40) {
+            inimigo.estaBrilhando = !inimigo.estaBrilhando;
+            inimigo.ultimoAlternarPisca = agora;
+        }
+
+        ctx.fillStyle = inimigo.estaBrilhando ? 'white' : inimigo.cor;
+    } else {
+        inimigo.estaBrilhando = false;
+        ctx.fillStyle = inimigo.cor;
+    }
+
     ctx.fillRect(inimigo.x, inimigo.y, inimigo.largura, inimigo.altura);
 };

@@ -6,7 +6,15 @@
 const teclasPressionadas = {}
 // Quando apertar a tecla
 window.addEventListener('keydown', (e) => {
+    if (e.repeat) {
+        return;
+    }
+
     teclasPressionadas[e.key] = true;
+
+    if (e.key === 'z' || e.key === 'Z') {
+        atacar();
+    }
 });
 
 // Quando soltar a tecla

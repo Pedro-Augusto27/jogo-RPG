@@ -15,7 +15,13 @@ const jogador = {
     ultimoAlternarPisca: 0, // Para controlar a frequência do piscar
     estaBrilhando: false, // Se o jogador está atualmente brilhando (parte do efeito de dano)
     ultimoDanoRecebido: 0, // Quanto dano ele recebeu no último ataque
-    mostrarDanoAte: 0 // Até quando mostrar o texto de dano recebido
+    mostrarDanoAte: 0, // Até quando mostrar o texto de dano recebido
+    temEspada: false,
+    direcaoUltima: 1,
+    direcaoAtaque: 'right',
+    estaAtacando: false,
+    fimAtaqueAte: 0,
+    ataqueJaAcertou: false
 };
 
 
@@ -42,6 +48,12 @@ function resetarJogador() {
     jogador.estaBrilhando = false;
     jogador.ultimoDanoRecebido = 0;
     jogador.mostrarDanoAte = 0;
+    jogador.temEspada = false;
+    jogador.direcaoUltima = 1;
+    jogador.direcaoAtaque = 'right';
+    jogador.estaAtacando = false;
+    jogador.fimAtaqueAte = 0;
+    jogador.ataqueJaAcertou = false;
 }
 
 
@@ -104,15 +116,21 @@ const velocidade = 5; // Quantos pixels o jogador anda por frame
 function moverJogador() {
     if (teclasPressionadas['ArrowUp'] && jogador.y > 0) {
         jogador.y -= velocidade; // Move para cima 
+        jogador.direcaoAtaque = 'up';
     }
     if (teclasPressionadas['ArrowDown'] && jogador.y < canvas.height - jogador.altura) {
         jogador.y += velocidade; // Move para baixo
+        jogador.direcaoAtaque = 'down';
     }
     if (teclasPressionadas['ArrowLeft'] && jogador.x > 0) {
         jogador.x -= velocidade; // Move para esquerda
+        jogador.direcaoUltima = -1;
+        jogador.direcaoAtaque = 'left';
     }
     if (teclasPressionadas['ArrowRight'] && jogador.x < canvas.width - jogador.largura) {
         jogador.x += velocidade; // Move para direita
+        jogador.direcaoUltima = 1;
+        jogador.direcaoAtaque = 'right';
     }
 }
 
@@ -120,7 +138,7 @@ function moverJogador() {
 function tomarDano(valor) {
     jogador.vida -= valor;
 
-    if (jogador.vida <= 0){
+    if (jogador.vida <= 0) {
         jogador.vida = 0;
     }
 
@@ -131,4 +149,12 @@ function tomarDano(valor) {
     jogador.fimPiscaAte = agora + 200;
     jogador.ultimoAlternarPisca = 0;
     jogador.estaBrilhando = true;
+}
+
+
+// Função de ataque do jogador
+function atacar() {
+    if (typeof iniciarAtaque === 'function') {
+        iniciarAtaque();
+    }
 }
