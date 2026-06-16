@@ -1,6 +1,6 @@
 // Arquivo 'logicaJogo.js' é responsavel por toda a logica do
-// jogo, como movimentação, colisão, mudança de cenário, etc.
 
+// jogo, como movimentação, colisão, mudança de cenário, etc.
 const obstaculo = { x: 200, y: 200, largura: 50, altura: 50, cor: 'black' };
 
 function desenharCenario() {
@@ -23,9 +23,11 @@ function atualizar() {
 
     // 2. Atualiza a logica de cada objeto
     moverJogador();
+    moverInimigo();
 
     // 3. Redesenha tudo na tela
     desenharJogador();
+    desenharInimigo();
 
     // 4. Repete
     requestAnimationFrame(atualizar);

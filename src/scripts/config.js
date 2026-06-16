@@ -1,4 +1,4 @@
-// Está é o arquivo 'config.js' é aqui que ficaas Variáveis globais 
+// Está é o arquivo 'config.js' é aqui que fica as Variáveis globais 
 // e configurações.
 
 const canvas = document.getElementById('jogo-RPG');
