@@ -23,7 +23,6 @@ const espada = {
 };
 espada.imagem.src = '/src/assets/img/espada.png';
 
-
 // Função para detectar a colisao entre dois objetos (jogador e inimigo)
 function detectarColisao(a, b) {
     return (
@@ -33,7 +32,6 @@ function detectarColisao(a, b) {
         a.y + a.altura > b.y
     );
 }
-
 
 // Função de desenhar a tela de Game Over
 function desenharGameOver() {
@@ -49,7 +47,6 @@ function desenharGameOver() {
     ctx.fillText('Reiniciando...', canvas.width / 2, canvas.height / 2 + 28);
     ctx.textAlign = 'left';
 }
-
 
 // Função de reniciar o jogo, resetando tudo para o estado inicial
 function reiniciarJogo() {
@@ -68,6 +65,10 @@ function reiniciarJogo() {
     espada.pega = false;
 }
 
+// Função para verificar se o inimigo ainda tem vida
+function inimigoEstaVivo() {
+    return inimigo.vida > 0;
+}
 
 // Função de desenhar a espada
 function desenharEspada() {
@@ -79,6 +80,7 @@ function desenharEspada() {
     }
 }
 
+// Função para o jogador atacar
 function iniciarAtaque() {
     const agora = Date.now();
 
@@ -95,6 +97,7 @@ function iniciarAtaque() {
     jogador.ataqueJaAcertou = false;
     ultimoAtaque = agora;
 }
+
 
 function getHitboxAtaque() {
     const tamanhoAtaque = 38;
@@ -134,12 +137,13 @@ function getHitboxAtaque() {
     };
 }
 
+
 function tentarAtacar() {
     if (!jogador.estaAtacando || jogoAcabado || jogador.ataqueJaAcertou) {
         return false;
     }
 
-    if (inimigo.vida <= 0) {
+    if (!inimigoEstaVivo()) {
         return false;
     }
 
@@ -162,6 +166,8 @@ function tentarAtacar() {
     return false;
 }
 
+
+// Função de desenhar o ataque do jogador
 function desenharAtaque() {
     if (!jogador.estaAtacando || jogoAcabado || !jogador.temEspada) {
         return;
@@ -233,7 +239,9 @@ function atualizar() {
     if (!jogoAcabado) {
         // 2. Atualiza a logica de cada objeto
         moverJogador();
-        moverInimigo();
+        if (inimigoEstaVivo()) {
+            moverInimigo();
+        }
 
         if (jogador.estaAtacando) {
             tentarAtacar();
@@ -245,8 +253,8 @@ function atualizar() {
         }
 
         // 3.Colisão:
-        // Colisão entre jogador e inimigo
-        if (detectarColisao(jogador, inimigo)) {
+        // Colisão entre jogador e inimigo apenas enquanto ele estiver vivo
+        if (inimigoEstaVivo() && detectarColisao(jogador, inimigo)) {
             const agora = Date.now();
 
             if (agora - ultimoDano >= intervaloDano) {
@@ -269,15 +277,6 @@ function atualizar() {
         if (!espada.pega && detectarColisao(jogador, espada)) {
             jogador.temEspada = true;
             espada.pega = true;
-        }
-
-        if (inimigo.vida <= 0) {
-            jogoAcabado = true;
-
-            if (!reinicioAgendado) {
-                reinicioAgendado = true;
-                setTimeout(reiniciarJogo, tempoAntesDeReiniciar);
-            }
         }
     }
 

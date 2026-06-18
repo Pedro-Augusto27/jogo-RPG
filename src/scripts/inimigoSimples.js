@@ -8,7 +8,7 @@ const inimigo = {
 
     velocidadeX: 2,  // Velocidade horizontal 
     direcao: 1, // 1 = direita, -1 = esquerda
-    
+
     vida: 3, // Vida do inimigo
     fimPiscaAte: 0,
     ultimoAlternarPisca: 0,
@@ -41,14 +41,17 @@ function moverInimigo() {
 // Desenha o inimigo
 function desenharInimigo() {
     const agora = Date.now();
+    const vivo = inimigo.vida > 0;
 
-    if (agora < inimigo.fimPiscaAte) {
+    if (vivo && agora < inimigo.fimPiscaAte) {
         if (agora - inimigo.ultimoAlternarPisca >= 40) {
             inimigo.estaBrilhando = !inimigo.estaBrilhando;
             inimigo.ultimoAlternarPisca = agora;
         }
 
         ctx.fillStyle = inimigo.estaBrilhando ? 'white' : inimigo.cor;
+    } else if (!vivo) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
     } else {
         inimigo.estaBrilhando = false;
         ctx.fillStyle = inimigo.cor;
