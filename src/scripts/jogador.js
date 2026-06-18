@@ -154,6 +154,11 @@ function tomarDano(valor) {
 
 // Função de ataque do jogador
 function atacar() {
+    if (typeof acaoPrincipal === 'function') {
+        acaoPrincipal();
+        return;
+    }
+
     if (typeof iniciarAtaque === 'function') {
         iniciarAtaque();
     }
