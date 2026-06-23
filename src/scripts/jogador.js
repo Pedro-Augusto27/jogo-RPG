@@ -1,6 +1,6 @@
 const jogador = {
     // Posição inicial do jogador:
-    x: 300,  // Posição horizontal inicial
+    x: 375,  // Posição horizontal inicial
     y: 420,  // Posição vertical inicial
 
     // Características do jogador:
@@ -40,7 +40,7 @@ imagensCoracao[3].src = './assets/img/coracao-3.png';
 
 // Função de resetar o jogador para o estado inicial
 function resetarJogador() {
-    jogador.x = 300;
+    jogador.x = 375;
     jogador.y = 420;
     jogador.vida = jogador.vidaMaxima;
     jogador.tomouDano = false;

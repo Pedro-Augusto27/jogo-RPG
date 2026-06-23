@@ -19,11 +19,14 @@ let caixaDialogoAberta = false;
 
 // Objeto que representa o NPC Mago na tela (posição, estado de diálogo, etc.)
 const npc = {
+    // Posição inicial do mago quando ele não esta visivel
     x: 0,
     y: 0,
-    largura: 28,
-    altura: 42,
-    cor: '#7d3cff',
+
+    largura: 40,
+    altura: 40,
+    cor: 'purple',
+    
     visivel: false,
     dialogando: false,
     indiceDialogo: 0

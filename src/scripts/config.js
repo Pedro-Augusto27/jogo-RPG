@@ -12,7 +12,7 @@ const ctx = canvas.getContext('2d'); // 2d é o tipo de contexto para que possa 
 
 
 // --- CONFIGURAÇÕES GLOBAIS ---
-const MODO_DEBUG = true; // Altere para false para esconder a entidades "fantasmas".
+const MODO_DEBUG = false; // Altere para false para esconder a entidades "fantasmas".
 
 let faseAtual = 1; // Controla em qual fase o jogador está
 let jogoAcabado = false;

@@ -3,7 +3,7 @@
 const porta = {
     // Posição da porta no mapa:
     x: 375,         // Posição X no mapa (perto do Mago)
-    y: 40,           // Posição Y (mais para cima, simulando uma saída)
+    y: 20,           // Posição Y (mais para cima, simulando uma saída)
     
     // Características da porta:
     largura: 50,    // Largura do quadro amarelado
