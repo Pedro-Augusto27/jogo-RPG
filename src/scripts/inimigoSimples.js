@@ -1,15 +1,21 @@
 const inimigo = {
+    // Posição inicial do inimigo:
     x: 450,  // Posição horizontal inicial
     y: 121,  // Posição vertical inicial
+
+    // Características do inimigo:
     largura: 40,  // Largura do inimigo
     altura: 40,  // Altura do inimigo
-
     cor: 'blue',  // Cor do inimigo
 
+    // Movimentação do inimigo:
     velocidadeX: 2,  // Velocidade horizontal 
     direcao: 1, // 1 = direita, -1 = esquerda
 
+    // Vida do inimigo:
     vida: 3, // Vida do inimigo
+
+    // Estado do inimigo:
     fimPiscaAte: 0,
     ultimoAlternarPisca: 0,
     estaBrilhando: false,

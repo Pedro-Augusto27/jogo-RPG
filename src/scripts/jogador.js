@@ -1,15 +1,18 @@
 const jogador = {
+    // Posição inicial do jogador:
     x: 300,  // Posição horizontal inicial
     y: 420,  // Posição vertical inicial
 
-    // Tamanho do jogador
+    // Características do jogador:
     largura: 40,
     altura: 40,
-
     cor: 'red', // Cor dele
 
+    // Vida do jogador:
     vidaMaxima: 3, // Vida máxima do jogador
     vida: 3, // Vida atual do Jogador
+
+    // Estado do jogador:
     tomouDano: false, // Se o jogador tomou dano recentemente, para controlar o efeito de piscar
     fimPiscaAte: 0, // Até quando o jogador deve continuar piscando
     ultimoAlternarPisca: 0, // Para controlar a frequência do piscar
@@ -24,7 +27,6 @@ const jogador = {
     ataqueJaAcertou: false
 };
 
-
 // Carrega as imagens dos corações
 const imagensCoracao = {
     1: new Image(),
@@ -35,7 +37,6 @@ const imagensCoracao = {
 imagensCoracao[1].src = '/src/assets/img/coracao-1.png';
 imagensCoracao[2].src = '/src/assets/img/coracao-2.png';
 imagensCoracao[3].src = '/src/assets/img/coracao-3.png';
-
 
 // Função de resetar o jogador para o estado inicial
 function resetarJogador() {
@@ -56,7 +57,6 @@ function resetarJogador() {
     jogador.ataqueJaAcertou = false;
 }
 
-
 // Função para desenhar um coração com proporção ajustada
 function desenharCoracaoComProporcao(imagem, x, y, alturaDesejada) {
     if (!imagem.complete || imagem.naturalWidth === 0 || imagem.naturalHeight === 0) {
@@ -69,7 +69,6 @@ function desenharCoracaoComProporcao(imagem, x, y, alturaDesejada) {
     ctx.drawImage(imagem, x, y, largura, alturaDesejada);
     return largura;
 }
-
 
 // Desenha o jogador
 function desenharJogador() {
@@ -91,7 +90,6 @@ function desenharJogador() {
     ctx.fillRect(jogador.x, jogador.y, jogador.largura, jogador.altura);
 }
 
-
 // Vida do jogador
 function desenharVida() {
     const coracaoAtual = imagensCoracao[jogador.vida] || imagensCoracao[1];
@@ -108,7 +106,6 @@ function desenharVida() {
         ctx.textAlign = 'left';
     }
 }
-
 
 // Movimetação do jogador
 const velocidade = 5; // Quantos pixels o jogador anda por frame

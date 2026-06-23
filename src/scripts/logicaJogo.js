@@ -1,6 +1,22 @@
 // Arquivo 'logicaJogo.js' é responsavel por toda a logica do
 // jogo, como movimentação, colisão, mudança de cenário, etc.
 
+/*
+console.log("O Canvas foi encontrado?", canvas);
+
+// Forçando o tamanho aqui dentro para testar
+canvas.width = 800;
+canvas.height = 600;
+
+// Desenha um fundo preto para sabermos onde a tela está
+ctx.fillStyle = "black";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+// Desenha um quadrado vermelho no meio
+ctx.fillStyle = "red";
+ctx.fillRect(100, 100, 200, 200);
+
+
 let ultimoDano = 0;
 const intervaloDano = 500; // Tempo minimo entre danos (em ms)
 let jogoAcabado = false;
@@ -10,6 +26,7 @@ let ultimoAtaque = 0;
 const intervaloAtaque = 400;
 const duracaoAtaque = 180;
 const danoDoAtaque = 1;
+*/
 
 // Espada para o jogador pegar
 const espada = {
@@ -23,17 +40,7 @@ const espada = {
 };
 espada.imagem.src = '/src/assets/img/espada.png';
 
-// Const para o navegador saber que as teclas estão sendo pressionadas
-const dialogosNpc = [
-    'Olá, jovem guerreiro, vejo que conseguiu derrotar aquela criatura.',
-    'Eu sou um mago e vi sua luta. Você é muito habilidoso!',
-    'Agora eu posso falar com você!',
-    "Apenas pressione 'Z' para continuar.",
-    'Agora, guerriero, você precisa ir derrotar a grande criatura.',
-    "Para isso, siga reto para quela direção seta para cima ⬆️.",
-];
-
-// Função para detectar a colisao entre dois objetos (jogador e inimigo).
+// Função para detectar a colisao entre as entidades do jogo.
 function detectarColisao(a, b) {
     return (
         a.x < b.x + b.largura &&
@@ -44,39 +51,6 @@ function detectarColisao(a, b) {
 }
 
 /*
-// Função de desenhar a tela de Game Over.
-function desenharGameOver() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.font = 'bold 42px Arial';
-    ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
-
-    ctx.font = 'bold 18px Arial';
-    ctx.fillText('Reiniciando...', canvas.width / 2, canvas.height / 2 + 28);
-    ctx.textAlign = 'left';
-}
-*/
-
-// Função de reniciar o jogo, resetando tudo para o estado inicial.
-function reiniciarJogo() {
-    jogoAcabado = false;
-    reinicioAgendado = false;
-    ultimoDano = 0;
-    ultimoAtaque = 0;
-
-    resetarJogador();
-
-    inimigo.x = 450;
-    inimigo.y = 121;
-    inimigo.direcao = 1;
-    inimigo.vida = 3;
-
-    espada.pega = false;
-}
-
 // Função para verificar se o inimigo ainda tem vida.
 const npc = {
     x: 0,
@@ -88,15 +62,7 @@ const npc = {
     dialogando: false,
     indiceDialogo: 0
 };
-
-function detectarColisao(a, b) {
-    return (
-        a.x < b.x + b.largura &&
-        a.x + a.largura > b.x &&
-        a.y < b.y + b.altura &&
-        a.y + a.altura > b.y
-    );
-}
+*/
 
 // Função de desenhar a tela de Game Over.
 function desenharGameOver() {
@@ -119,6 +85,7 @@ function reiniciarJogo() {
     reinicioAgendado = false;
     ultimoDano = 0;
     ultimoAtaque = 0;
+    faseAtual = 1;
 
     resetarJogador();
 
@@ -136,8 +103,10 @@ function reiniciarJogo() {
     npc.visivel = false;
     npc.dialogando = false;
     npc.indiceDialogo = 0;
+    porta.visivel = false;
 }
 
+/*
 // Função de verificar se o inimigo está vivo.
 function inimigoEstaVivo() {
     return inimigo.vida > 0;
@@ -168,6 +137,9 @@ function avancarDialogoNpc() {
     if (npc.indiceDialogo >= dialogosNpc.length) {
         npc.dialogando = false;
         npc.indiceDialogo = 0;
+
+        // Aparece a porta quando o dialogo acabar
+        porta.visivel = true;
     }
 }
 
@@ -251,8 +223,9 @@ function desenharEspada() {
         }
     }
 }
+*/
 
-// fUnção que inicia o ataque do Jogador
+// função que inicia o ataque do Jogador
 function iniciarAtaque() {
     const agora = Date.now();
 
@@ -270,6 +243,7 @@ function iniciarAtaque() {
     ultimoAtaque = agora;
 }
 
+// Calcula a área da hitbox do ataque baseado na direção
 function getHitboxAtaque() {
     const tamanhoAtaque = 38;
 
@@ -338,7 +312,7 @@ function tentarAtacar() {
     return false;
 }
 
-// Função que realiza a ação principal do jogador, como atacar ou interagir com o NPC
+// Função que realiza a ação(Z) principal do jogador, como atacar ou interagir com o NPC
 function acaoPrincipal() {
     if (npc.dialogando) {
         avancarDialogoNpc();
@@ -355,7 +329,7 @@ function acaoPrincipal() {
     }
 }
 
-// Função que desenha o ataque do jogador
+// Desenha a animação da espada girando ao atacar
 function desenharAtaque() {
     if (!jogador.estaAtacando || jogoAcabado || !jogador.temEspada) {
         return;
@@ -411,12 +385,52 @@ function desenharAtaque() {
     ctx.restore();
 }
 
-// FUnção que mostra o NPC se o inimigo foi derrotado
+/*
+// Função que mostra o NPC se o inimigo foi derrotado
 function mostrarNpcSeDerrotado() {
     if (!inimigoEstaVivo() && !npc.visivel) {
         ativarNpc();
     }
 }
+
+// Função para desenhar o quadrado amarelo da porta
+function desenharPorta() {
+    if (!porta.visivel) {
+        return;
+    }
+
+    // Desenha o fundo amarelho
+    ctx.fillStyle = porta.cor;
+    ctx.fillRect(porta.x, porta.y, porta.largura, porta.altura);
+
+    // Borda laranja. Efeito de luz
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#ff9800';
+    ctx.strokeRect(porta.x, porta.y, porta.largura, porta.altura);
+}
+
+function proximaFase() {
+    faseAtual += 1;
+
+    // Some com a porta e com NPC para preparar o novo mapa
+    porta.visivel = false;
+    npc.visivel = false;
+
+    // Reseta a posição do jogador para o inicio do mapa
+    jogador.x = 300;
+    jogador.y = 420;
+
+    // -- CONFIGURAÇÃO DA FASE 2 --
+    if (faseAtual === 2) {
+        // inimigo.x = 200;
+        inimigo.y = 150;
+        inimigo.vida = 5; // Mais vida na fase 2
+        inimigo.cor = 'purple'; // Inimigo roxo agora
+        
+        // Você também pode mudar a cor do jogador ou criar novos desafios aqui
+    }
+}
+*/
 
 
 /** 
@@ -427,6 +441,8 @@ function mostrarNpcSeDerrotado() {
  * 
  * Essa função gerencia tudo o que acontece no jogo.
 */
+
+// Loop central do jogo
 function atualizar() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -470,12 +486,17 @@ function atualizar() {
             jogador.temEspada = true;
             espada.pega = true;
         }
+
+        if (porta.visivel && detectarColisao(jogador, porta)) {
+            proximaFase();
+        }
     }
 
-    // Desenha tudo na tela
+    // Chamadas de desenho ordenadas
     desenharJogador();
     desenharInimigo();
     desenharNpc();
+    desenharPorta();
     desenharVida();
     desenharEspada();
     desenharAtaque();
@@ -487,4 +508,6 @@ function atualizar() {
 
     requestAnimationFrame(atualizar);
 }
+
+// Inicia o ciclo do motor
 atualizar();
