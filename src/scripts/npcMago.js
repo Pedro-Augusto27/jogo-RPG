@@ -17,6 +17,18 @@ const npcMago = {
 
 let caixaDialogoAberta = false;
 
+// Objeto que representa o NPC Mago na tela (posição, estado de diálogo, etc.)
+const npc = {
+    x: 0,
+    y: 0,
+    largura: 28,
+    altura: 42,
+    cor: '#7d3cff',
+    visivel: false,
+    dialogando: false,
+    indiceDialogo: 0
+};
+
 // Const para o navegador saber que as teclas estão sendo pressionadas
 const dialogosNpc = [
     'Olá, jovem guerreiro, vejo que conseguiu derrotar aquela criatura.',
@@ -74,7 +86,7 @@ function desenharTextoQuebrado(texto, x, y, maxWidth, lineHeight) {
     let posicaoY = y;
 
     for (let i = 0; i < palavras.length; i += 1) {
-        const testeLinha = curve = linha + palavras[i] + ' ';
+        const testeLinha = linha + palavras[i] + ' ';
         const larguraLinha = ctx.measureText(testeLinha).width;
 
         if (larguraLinha > maxWidth && i > 0) {

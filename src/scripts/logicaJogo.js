@@ -1,33 +1,6 @@
 // Arquivo 'logicaJogo.js' é responsavel por toda a logica do
 // jogo, como movimentação, colisão, mudança de cenário, etc.
 
-/*
-console.log("O Canvas foi encontrado?", canvas);
-
-// Forçando o tamanho aqui dentro para testar
-canvas.width = 800;
-canvas.height = 600;
-
-// Desenha um fundo preto para sabermos onde a tela está
-ctx.fillStyle = "black";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-// Desenha um quadrado vermelho no meio
-ctx.fillStyle = "red";
-ctx.fillRect(100, 100, 200, 200);
-
-
-let ultimoDano = 0;
-const intervaloDano = 500; // Tempo minimo entre danos (em ms)
-let jogoAcabado = false;
-let reinicioAgendado = false;
-const tempoAntesDeReiniciar = 1500;
-let ultimoAtaque = 0;
-const intervaloAtaque = 400;
-const duracaoAtaque = 180;
-const danoDoAtaque = 1;
-*/
-
 // Espada para o jogador pegar
 const espada = {
     x: 150,
@@ -38,7 +11,7 @@ const espada = {
     imagem: new Image(),
     pega: false
 };
-espada.imagem.src = '/src/assets/img/espada.png';
+espada.imagem.src = './assets/img/espada.png';
 
 // Função para detectar a colisao entre as entidades do jogo.
 function detectarColisao(a, b) {
@@ -49,20 +22,6 @@ function detectarColisao(a, b) {
         a.y + a.altura > b.y
     );
 }
-
-/*
-// Função para verificar se o inimigo ainda tem vida.
-const npc = {
-    x: 0,
-    y: 0,
-    largura: 28,
-    altura: 42,
-    cor: '#7d3cff',
-    visivel: false,
-    dialogando: false,
-    indiceDialogo: 0
-};
-*/
 
 // Função de desenhar a tela de Game Over.
 function desenharGameOver() {
@@ -106,7 +65,7 @@ function reiniciarJogo() {
     porta.visivel = false;
 }
 
-/*
+
 // Função de verificar se o inimigo está vivo.
 function inimigoEstaVivo() {
     return inimigo.vida > 0;
@@ -117,99 +76,6 @@ function ativarNpc() {
     npc.visivel = true;
     npc.x = inimigo.x + inimigo.largura + 18;
     npc.y = inimigo.y - 4;
-}
-
-// Função que verifica se o jogador está perto do NPC
-function jogadorPertoDoNpc() {
-    return npc.visivel && detectarColisao(jogador, npc);
-}
-
-// Função que inicia o dialogo com o NPC
-function iniciarDialogoNpc() {
-    npc.dialogando = true;
-    npc.indiceDialogo = 0;
-}
-
-// Função que avança o dialogo com o NPC
-function avancarDialogoNpc() {
-    npc.indiceDialogo += 1;
-
-    if (npc.indiceDialogo >= dialogosNpc.length) {
-        npc.dialogando = false;
-        npc.indiceDialogo = 0;
-
-        // Aparece a porta quando o dialogo acabar
-        porta.visivel = true;
-    }
-}
-
-// Função que desenha o texto quebrado ao falar com o NPC
-function desenharTextoQuebrado(texto, x, y, maxWidth, lineHeight) {
-    const palavras = texto.split(' ');
-    let linha = '';
-    let posicaoY = y;
-
-    for (let i = 0; i < palavras.length; i += 1) {
-        const testeLinha = linha + palavras[i] + ' ';
-        const larguraLinha = ctx.measureText(testeLinha).width;
-
-        if (larguraLinha > maxWidth && i > 0) {
-            ctx.fillText(linha, x, posicaoY);
-            linha = palavras[i] + ' ';
-            posicaoY += lineHeight;
-        } else {
-            linha = testeLinha;
-        }
-    }
-
-    ctx.fillText(linha, x, posicaoY);
-}
-
-// Função que desenha o NPC
-function desenharNpc() {
-    if (!npc.visivel) {
-        return;
-    }
-
-    ctx.fillStyle = npc.cor;
-    ctx.fillRect(npc.x, npc.y, npc.largura, npc.altura);
-
-    
-    ctx.fillRect(npc.x + 4, npc.y + 7, 5, 5);
-    ctx.fillRect(npc.x + 19, npc.y + 7, 5, 5);
-    ctx.fillRect(npc.x + 9, npc.y + 24, 10, 3);
-}
-
-// Função que desenha a caixa de dialogo do NPC
-function desenharCaixaDialogo() {
-    if (!npc.dialogando) {
-        return;
-    }
-
-    const margem = 18;
-    const altura = 118;
-    const x = margem;
-    const y = canvas.height - altura - margem;
-    const largura = canvas.width - margem * 2;
-    const texto = dialogosNpc[npc.indiceDialogo] || '';
-
-    ctx.fillStyle = '#050505';
-    ctx.fillRect(x, y, largura, altura);
-
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = 'white';
-    ctx.strokeRect(x, y, largura, altura);
-
-    ctx.fillStyle = 'white';
-    ctx.font = 'bold 18px Arial';
-    ctx.textAlign = 'left';
-    ctx.fillText('Grande Mago', x + 18, y + 28);
-
-    ctx.font = '16px Arial';
-    desenharTextoQuebrado(texto, x + 18, y + 62, largura - 36, 20);
-
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText('Z', x + largura - 28, y + altura - 18);
 }
 
 // Função que desenha a espada no chão
@@ -223,7 +89,6 @@ function desenharEspada() {
         }
     }
 }
-*/
 
 // função que inicia o ataque do Jogador
 function iniciarAtaque() {

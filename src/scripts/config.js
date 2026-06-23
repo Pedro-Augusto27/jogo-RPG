@@ -2,12 +2,18 @@
 // e configurações.
 const canvas = document.getElementById('jogo-RPG');
 
+// Define o tamanho de desenho do canvas.
+// Sem isso, o navegador usa o padrão de 300x150px, deixando a tela pequena.
+canvas.width = 800;
+canvas.height = 600;
+
 // ctx = Contexto, é o que usamos para desenhar no canvas e o tipo de contexto.
 const ctx = canvas.getContext('2d'); // 2d é o tipo de contexto para que possa desenhar.
 
 
 // --- CONFIGURAÇÕES GLOBAIS ---
 const MODO_DEBUG = true; // Altere para false para esconder a entidades "fantasmas".
+
 let faseAtual = 1; // Controla em qual fase o jogador está
 let jogoAcabado = false;
 let reinicioAgendado = false;

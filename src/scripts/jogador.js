@@ -34,9 +34,9 @@ const imagensCoracao = {
     3: new Image()
 };
 
-imagensCoracao[1].src = '/src/assets/img/coracao-1.png';
-imagensCoracao[2].src = '/src/assets/img/coracao-2.png';
-imagensCoracao[3].src = '/src/assets/img/coracao-3.png';
+imagensCoracao[1].src = './assets/img/coracao-1.png';
+imagensCoracao[2].src = './assets/img/coracao-2.png';
+imagensCoracao[3].src = './assets/img/coracao-3.png';
 
 // Função de resetar o jogador para o estado inicial
 function resetarJogador() {
