@@ -13,7 +13,7 @@ const espada = {
 };
 espada.imagem.src = './assets/img/espada.png';
 
-// Função para detectar a colisao entre as entidades do jogo.
+// Função para detectar a colisão entre as entidades do jogo.
 function detectarColisao(a, b) {
     return (
         a.x < b.x + b.largura &&
@@ -38,7 +38,18 @@ function desenharGameOver() {
     ctx.textAlign = 'left';
 }
 
-// Função de reniciar o jogo, resetando tudo para o estado inicial.
+// Verifica se todos os inimigos da lista estão mortos
+function todosInimigosMortos() {
+    if (!inimigos || inimigos.length === 0) return false;
+    return inimigos.every(i => i.vida <= 0);
+}
+
+// Função de verificar se ainda há algum inimigo vivo.
+function inimigoEstaVivo() {
+    return !todosInimigosMortos();
+}
+
+// Função de reiniciar o jogo, resetando tudo para o estado inicial.
 function reiniciarJogo() {
     jogoAcabado = false;
     reinicioAgendado = false;
@@ -48,13 +59,10 @@ function reiniciarJogo() {
 
     resetarJogador();
 
-    inimigo.x = 450;
-    inimigo.y = 121;
-    inimigo.direcao = 1;
-    inimigo.vida = 3;
-    inimigo.fimPiscaAte = 0;
-    inimigo.ultimoAlternarPisca = 0;
-    inimigo.estaBrilhando = false;
+    // Reinicia com apenas 1 inimigo azul para a Fase 1
+    inimigos = [
+        criarInimigo(450, 121, 'blue', 3, 350, 520)
+    ];
 
     espada.pega = false;
     espada.y = espada.yBase;
@@ -63,19 +71,6 @@ function reiniciarJogo() {
     npc.dialogando = false;
     npc.indiceDialogo = 0;
     porta.visivel = false;
-}
-
-
-// Função de verificar se o inimigo está vivo.
-function inimigoEstaVivo() {
-    return inimigo.vida > 0;
-}
-
-//Função que ativa o NPC
-function ativarNpc() {
-    npc.visivel = true;
-    npc.x = inimigo.x + inimigo.largura + 18;
-    npc.y = inimigo.y - 4;
 }
 
 // Função que desenha a espada no chão
@@ -90,7 +85,7 @@ function desenharEspada() {
     }
 }
 
-// função que inicia o ataque do Jogador
+// Função que inicia o ataque do Jogador
 function iniciarAtaque() {
     const agora = Date.now();
 
@@ -147,37 +142,33 @@ function getHitboxAtaque() {
     };
 }
 
-// Função de tentiva de ataque do jogador
+// Função de tentativa de ataque do jogador
 function tentarAtacar() {
     if (!jogador.estaAtacando || jogoAcabado || jogador.ataqueJaAcertou) {
         return false;
     }
 
-    if (!inimigoEstaVivo()) {
-        return false;
-    }
-
     const hitboxAtaque = getHitboxAtaque();
 
-    if (detectarColisao(hitboxAtaque, inimigo)) {
-        inimigo.vida -= danoDoAtaque;
+    for (let inimigo of inimigos) {
+        if (inimigo.vida > 0 && detectarColisao(hitboxAtaque, inimigo)) {
+            inimigo.vida -= danoDoAtaque;
 
-        if (inimigo.vida < 0) {
-            inimigo.vida = 0;
+            if (inimigo.vida < 0) inimigo.vida = 0;
+
+            inimigo.ultimoDanoRecebido = danoDoAtaque;
+            inimigo.fimPiscaAte = Date.now() + 160;
+            inimigo.ultimoAlternarPisca = 0;
+            inimigo.estaBrilhando = true;
+            jogador.ataqueJaAcertou = true;
+            return true;
         }
-
-        inimigo.ultimoDanoRecebido = danoDoAtaque;
-        inimigo.fimPiscaAte = Date.now() + 160;
-        inimigo.ultimoAlternarPisca = 0;
-        inimigo.estaBrilhando = true;
-        jogador.ataqueJaAcertou = true;
-        return true;
     }
 
     return false;
 }
 
-// Função que realiza a ação(Z) principal do jogador, como atacar ou interagir com o NPC
+// Função que realiza a ação (Z) principal do jogador
 function acaoPrincipal() {
     if (npc.dialogando) {
         avancarDialogoNpc();
@@ -250,75 +241,22 @@ function desenharAtaque() {
     ctx.restore();
 }
 
-/*
-// Função que mostra o NPC se o inimigo foi derrotado
-function mostrarNpcSeDerrotado() {
-    if (!inimigoEstaVivo() && !npc.visivel) {
-        ativarNpc();
-    }
-}
-
-// Função para desenhar o quadrado amarelo da porta
-function desenharPorta() {
-    if (!porta.visivel) {
-        return;
-    }
-
-    // Desenha o fundo amarelho
-    ctx.fillStyle = porta.cor;
-    ctx.fillRect(porta.x, porta.y, porta.largura, porta.altura);
-
-    // Borda laranja. Efeito de luz
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = '#ff9800';
-    ctx.strokeRect(porta.x, porta.y, porta.largura, porta.altura);
-}
-
-function proximaFase() {
-    faseAtual += 1;
-
-    // Some com a porta e com NPC para preparar o novo mapa
-    porta.visivel = false;
-    npc.visivel = false;
-
-    // Reseta a posição do jogador para o inicio do mapa
-    jogador.x = 300;
-    jogador.y = 420;
-
-    // -- CONFIGURAÇÃO DA FASE 2 --
-    if (faseAtual === 2) {
-        // inimigo.x = 200;
-        inimigo.y = 150;
-        inimigo.vida = 5; // Mais vida na fase 2
-        inimigo.cor = 'purple'; // Inimigo roxo agora
-        
-        // Você também pode mudar a cor do jogador ou criar novos desafios aqui
-    }
-}
-*/
-
-
-/** 
- * Função para atualizar o jogo, onde faz com o navegador redesenhe a tela
- * muitas vezes por segundo. 
- * 
- * Ele limpa a tela, atualiza a posição do jogador e desenha novamente.
- * 
- * Essa função gerencia tudo o que acontece no jogo.
-*/
-
 // Loop central do jogo
 function atualizar() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (!jogoAcabado) {
         moverJogador();
+        moverInimigos();
 
-        if (inimigoEstaVivo()) {
-            moverInimigo();
+        // REGRAS DE FASE:
+        if (faseAtual === 1) {
+            mostrarNpcSeDerrotado();
+        } else if (faseAtual === 2) {
+            if (todosInimigosMortos()) {
+                porta.visivel = true;
+            }
         }
-
-        mostrarNpcSeDerrotado();
 
         if (jogador.estaAtacando) {
             tentarAtacar();
@@ -329,14 +267,16 @@ function atualizar() {
             }
         }
 
-        if (inimigoEstaVivo() && detectarColisao(jogador, inimigo)) {
-            const agora = Date.now();
+        inimigos.forEach(inimigo => {
+            if (inimigo.vida > 0 && detectarColisao(jogador, inimigo)) {
+                const agora = Date.now();
 
-            if (agora - ultimoDano >= intervaloDano) {
-                tomarDano(1);
-                ultimoDano = agora;
+                if (agora - ultimoDano >= intervaloDano) {
+                    tomarDano(1);
+                    ultimoDano = agora;
+                }
             }
-        }
+        });
 
         if (jogador.vida <= 0) {
             jogoAcabado = true;
@@ -357,9 +297,9 @@ function atualizar() {
         }
     }
 
-    // Chamadas de desenho ordenadas
+    // Chamadas de desenho
     desenharJogador();
-    desenharInimigo();
+    desenharInimigos();
     desenharNpc();
     desenharPorta();
     desenharVida();
@@ -374,5 +314,5 @@ function atualizar() {
     requestAnimationFrame(atualizar);
 }
 
-// Inicia o ciclo do motor
+// Inicia o jogo
 atualizar();

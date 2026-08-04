@@ -45,8 +45,10 @@ const dialogosNpc = [
 // Função para ativar o NPC Mago
 function ativarNpc() {
     npc.visivel = true;
-    npc.x = inimigo.x + inimigo.largura + 18;
-    npc.y = inimigo.y - 4;
+    if (inimigos[0]) {
+        npc.x = inimigos[0].x + inimigos[0].largura + 18;
+        npc.y = inimigos[0].y - 4;
+    }
 }
 
 // Função para verificar se o jogador está perto do NPC Mago

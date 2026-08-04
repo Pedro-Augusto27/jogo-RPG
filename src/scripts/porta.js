@@ -4,12 +4,12 @@ const porta = {
     // Posição da porta no mapa:
     x: 375,         // Posição X no mapa (perto do Mago)
     y: 20,           // Posição Y (mais para cima, simulando uma saída)
-    
+
     // Características da porta:
     largura: 50,    // Largura do quadro amarelado
     altura: 50,     // Altura do quadro amarelado
     cor: '#ffeb3b', // Amarelo bem brilhante/luz
-    
+
     // Estado da porta:
     visivel: false  // Começa invisível até falar com o mago
 };
@@ -47,7 +47,7 @@ function desenharPorta() {
 // Função para verificar se o jogador está perto da porta
 function proximaFase() {
     faseAtual += 1;
-    
+
     porta.visivel = false;
     npc.visivel = false;
 
@@ -55,11 +55,31 @@ function proximaFase() {
     jogador.x = 300;
     jogador.y = 420;
 
-    // -- CONFIGURAÇÃO DA FASE 2 --
+    // -- CONFIGURAÇÃO DAS FASES --
+
+    // -- FASE 2
     if (faseAtual === 2) {
-        inimigo.x = 200;
-        inimigo.y = 150;
-        inimigo.vida = 5; // Mais vida na fase 2
-        inimigo.cor = 'purple'; // Inimigo roxo agora
+        // Criamos 3 inimigos roxos espalhados pela tela com limites diferentes!
+        inimigos = [
+            criarInimigo(150, 150, 'purple', 3, 50, 300),
+            criarInimigo(450, 220, 'purple', 3, 350, 600),
+            criarInimigo(300, 100, 'orange', 4, 200, 450) // Esse tem 4 de vida!
+        ];
+    }
+
+    // -- FASE 3: Chefão Vermelho + 2 Ajudantes Verdes! --
+    else if (faseAtual === 3) {
+        inimigos = [
+            criarInimigo(100, 150, 'green', 2, 50, 250),              // Minion 1
+            criarInimigo(600, 150, 'green', 2, 500, 700),             // Minion 2
+            criarInimigo(380, 80, 'red', 10, 200, 550)                // CHEFÃO (10 de vida!)
+        ];
+    }
+
+    // -- FIM DO JOGO / VITÓRIA (Ganha ao sair da Fase 3) --
+    else if (faseAtual === 4) {
+        jogoAcabado = true;
+        alert("Parabéns! Você derrotou o Chefão e completou o jogo!");
+        reiniciarJogo();
     }
 }
